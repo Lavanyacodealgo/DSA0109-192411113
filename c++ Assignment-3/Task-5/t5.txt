@@ -1,0 +1,93 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Time {
+    int h, m, s;
+
+public:
+    Time(int a = 0, int b = 0, int c = 0) {
+        h = a;
+        m = b;
+        s = c;
+    }
+
+    Time& operator++() {
+        s++;
+        if (s == 60) {
+            s = 0;
+            m++;
+        }
+        if (m == 60) {
+            m = 0;
+            h++;
+        }
+        return *this;
+    }
+
+    Time operator++(int) {
+        Time temp = *this;
+        ++(*this);
+        return temp;
+    }
+
+    bool operator==(Time t) {
+        return h == t.h && m == t.m && s == t.s;
+    }
+
+    bool operator<(Time t) {
+        if (h != t.h)
+            return h < t.h;
+        if (m != t.m)
+            return m < t.m;
+        return s < t.s;
+    }
+
+    void display() {
+        cout << h << ":" << m << ":" << s << endl;
+    }
+};
+
+class Playlist {
+    string songs[3];
+
+public:
+    Playlist() {
+        songs[0] = "Song 1";
+        songs[1] = "Song 2";
+        songs[2] = "Song 3";
+    }
+
+    string operator[](int i) {
+        if (i < 0 || i >= 3) {
+            cout << "Invalid index" << endl;
+            return "";
+        }
+        return songs[i];
+    }
+};
+
+int main() {
+    Time t(0, 0, 5);
+
+    cout << "Original time: ";
+    t.display();
+
+    Time a = t++;
+    cout << "Postfix increment: ";
+    a.display();
+
+    Time b = ++t;
+    cout << "Prefix increment: ";
+    b.display();
+
+    cout << "Time comparison: " << (a < b) << endl;
+    cout << "Equality: " << (a == b) << endl;
+
+    Playlist p;
+
+    cout << "Song: " << p[1] << endl;
+    cout << "Invalid song: " << p[5] << endl;
+
+    return 0;
+}

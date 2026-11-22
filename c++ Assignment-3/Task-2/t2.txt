@@ -1,0 +1,81 @@
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Prescription {
+    int n;
+    string* medicines;
+
+public:
+    Prescription(int count) {
+        n = count;
+        medicines = new string[n];
+    }
+
+    Prescription(const Prescription& p) {
+        n = p.n;
+        medicines = new string[n];
+
+        for (int i = 0; i < n; i++) {
+            medicines[i] = p.medicines[i];
+        }
+    }
+
+    Prescription& operator=(const Prescription& p) {
+        if (this != &p) {
+            delete[] medicines;
+
+            n = p.n;
+            medicines = new string[n];
+
+            for (int i = 0; i < n; i++) {
+                medicines[i] = p.medicines[i];
+            }
+        }
+
+        return *this;
+    }
+
+    void set(int i, string name) {
+        if (i >= 0 && i < n) {
+            medicines[i] = name;
+        }
+    }
+
+    void display() {
+        for (int i = 0; i < n; i++) {
+            cout << medicines[i] << " ";
+        }
+        cout << endl;
+    }
+
+    ~Prescription() {
+        delete[] medicines;
+    }
+};
+
+int main() {
+    Prescription p(2);
+
+    p.set(0, "Paracetamol");
+    p.set(1, "ORS");
+
+    Prescription q = p;
+
+    q.set(1, "Cetirizine");
+
+    cout << "Original: ";
+    p.display();
+
+    cout << "Copied: ";
+    q.display();
+
+    Prescription r(2);
+    r = p;
+
+    cout << "Assigned: ";
+    r.display();
+
+    return 0;
+}

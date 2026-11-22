@@ -1,0 +1,88 @@
+
+#include <iostream>
+using namespace std;
+
+class Money {
+    int rupees;
+    int paise;
+
+public:
+    Money(int r = 0, int p = 0) {
+        rupees = r;
+        paise = p;
+
+        rupees = rupees + paise / 100;
+        paise = paise % 100;
+    }
+
+    Money operator+(Money m) {
+        Money temp;
+        temp.rupees = rupees + m.rupees;
+        temp.paise = paise + m.paise;
+
+        if (temp.paise >= 100) {
+            temp.rupees++;
+            temp.paise -= 100;
+        }
+
+        return temp;
+    }
+
+    Money operator-(Money m) {
+        Money temp;
+        temp.rupees = rupees - m.rupees;
+        temp.paise = paise - m.paise;
+
+        if (temp.paise < 0) {
+            temp.rupees--;
+            temp.paise += 100;
+        }
+
+        return temp;
+    }
+
+    Money& operator+=(Money m) {
+        rupees += m.rupees;
+        paise += m.paise;
+
+        if (paise >= 100) {
+            rupees++;
+            paise -= 100;
+        }
+
+        return *this;
+    }
+
+    bool operator==(Money m) {
+        return rupees == m.rupees && paise == m.paise;
+    }
+
+    friend ostream& operator<<(ostream& out, Money m) {
+        out << "Rs. " << m.rupees << ".";
+
+        if (m.paise < 10)
+            out << "0";
+
+        out << m.paise;
+        return out;
+    }
+};
+
+int main() {
+    Money a(120, 75);
+    Money b(79, 25);
+
+    Money c = a + b;
+    cout << "Addition: " << c << endl;
+
+    Money d = a - b;
+    cout << "Subtraction: " << d << endl;
+
+    a += b;
+    cout << "Addition using +=: " << a << endl;
+
+    cout << boolalpha;
+    cout << "Equal: " << (a == c) << endl;
+
+    return 0;
+}
